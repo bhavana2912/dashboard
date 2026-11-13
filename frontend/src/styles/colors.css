@@ -1,0 +1,25 @@
+/* ONE place for all colours. Change here = whole app changes. */
+:root {
+  --color-primary: #0a3d73;
+  --color-primary-dark: #082c55;
+  --color-secondary: #1f6fb5;
+  --color-bg: #f2f5fa;
+  --color-surface: #ffffff;
+  --color-sidebar: #0b3a6b;
+  --color-sidebar-dark: #072a50;
+  --color-sidebar-text: #dbe7f5;
+  --color-text: #1b2a3b;
+  --color-text-muted: #6b7a8c;
+  --color-border: #dfe6ee;
+  --color-table-head: #f0f3f7;
+  --color-success: #1f9d6b;
+  --color-warning: #e8a317;
+  --color-danger: #e5484d;
+}
+
+/* Colour themes from the Appearance & layout panel */
+[data-theme="forest"]  { --color-primary:#1d5e3a; --color-primary-dark:#144528; --color-secondary:#2f8f5b; --color-sidebar:#1d5e3a; --color-sidebar-dark:#144528; }
+[data-theme="teal"]    { --color-primary:#0f6b73; --color-primary-dark:#0a4e55; --color-secondary:#1d9aa5; --color-sidebar:#0f6b73; --color-sidebar-dark:#0a4e55; }
+[data-theme="graphite"]{ --color-primary:#3a4350; --color-primary-dark:#272d37; --color-secondary:#5b6676; --color-sidebar:#3a4350; --color-sidebar-dark:#272d37; }
+[data-theme="sunrise"] { --color-primary:#b4491c; --color-primary-dark:#8a3513; --color-secondary:#e07a2f; --color-sidebar:#b4491c; --color-sidebar-dark:#8a3513; }
+[data-theme="sky"]     { --color-primary:#1c6fc4; --color-primary-dark:#14529b; --color-secondary:#3b9be8; --color-sidebar:#1c6fc4; --color-sidebar-dark:#14529b; }

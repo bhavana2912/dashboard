@@ -1,0 +1,28 @@
+/* GLOBAL BASE STYLES */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Inter, "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
