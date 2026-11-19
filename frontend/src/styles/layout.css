@@ -1,4 +1,347 @@
 
+/* HOME TASK PANEL - COMPACT ORIGINAL STYLE */
+
+.home-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.home-right-column .cal {
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.home-right-column .cal-grid {
+  gap: 2px;
+}
+
+.home-right-column .cal-grid .day {
+  min-height: 27px;
+  height: 27px;
+  width: 27px;
+}
+
+.home-task-panel {
+  width: 100%;
+  min-height: 0;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.home-task-header {
+  min-height: 40px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.home-task-add {
+  width: 28px;
+  height: 28px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.home-task-table {
+  min-height: 55px;
+  padding: 10px 12px 8px;
+}
+
+.home-task-columns {
+  padding-bottom: 8px;
+  font-size: 12px;
+}
+
+.home-task-row {
+  padding: 7px 0;
+  font-size: 12px;
+}
+
+.home-grid {
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  padding: 18px;
+}
+
+/* FIX CALENDAR DATE BUTTON APPEARANCE */
+
+.cal-grid button.day {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  margin: 0 auto;
+  border: none !important;
+  outline: none;
+  box-shadow: none !important;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-grid button.day:hover:not(:disabled) {
+  background: #e5edf7;
+  color: #07518b;
+}
+
+.cal-grid button.day.today {
+  background: #e5edf7;
+  color: #07518b;
+  font-weight: 700;
+}
+
+.cal-grid button.day.selected {
+  background: #07518b;
+  color: #fff;
+  font-weight: 700;
+}
+
+.cal-grid button.day:disabled {
+  color: #b6c0cc;
+  cursor: default;
+  background: transparent;
+  opacity: 1;
+}
+
+/* ==================================
+   SATYA SCHOOL - TASK MODAL
+================================== */
+
+.task-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.48);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+}
+
+.task-modal {
+  width: 970px;
+  max-width: 96vw;
+  max-height: 84vh;
+  background: #fff;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .22);
+  padding: 0;
+}
+
+.task-modal-header {
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  border-bottom: 1px solid #dce4ed;
+  color: #102b4b;
+  font-size: 17px;
+}
+
+.task-modal-x {
+  border: 0;
+  background: transparent;
+  color: #888;
+  font-size: 25px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.task-modal-body {
+  padding: 15px 19px 24px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.task-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-bottom: 15px;
+}
+
+.task-field label {
+  color: #5e7085;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  margin-bottom: 9px;
+}
+
+.task-field input,
+.task-field select {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #ccd8e6;
+  border-radius: 8px;
+  background: #fff;
+  color: #38485b;
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.task-field input:focus,
+.task-field select:focus {
+  border-color: #4285bd;
+  box-shadow: 0 0 0 2px rgba(66, 133, 189, .10);
+}
+
+.task-date-field input {
+  border: 0;
+  border-bottom: 1px solid #999;
+  border-radius: 0;
+  padding-left: 0;
+  color: #555;
+}
+
+.task-search-control {
+  display: flex;
+  width: 100%;
+}
+
+.task-search-control input {
+  border-radius: 8px 0 0 8px;
+  min-width: 0;
+}
+
+.task-search-control button {
+  width: 42px;
+  flex-shrink: 0;
+  border: 1px solid #ccd8e6;
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+  background: #f9fbfd;
+  color: #07518b;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.task-search-control button:hover {
+  background: #edf4fb;
+}
+
+.task-search-icon {
+  display: inline-block;
+  transform: rotate(-20deg);
+}
+
+.task-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  align-items: start;
+}
+
+.task-modal-footer {
+  min-height: 68px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #fff;
+  border-top: 1px solid #dce4ed;
+}
+
+.task-modal-footer button {
+  min-width: 95px;
+  height: 43px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.task-close-btn {
+  border: 1px solid #ccd8e6;
+  background: #fff;
+  color: #26384c;
+}
+
+.task-save-btn {
+  border: 1px solid #16834e;
+  background: #16834e;
+  color: #fff;
+}
+
+.task-save-btn:hover {
+  background: #116d40;
+}
+
+.home-task-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 9px 0;
+  border-bottom: 1px solid #edf0f4;
+  font-size: 12px;
+  text-align: center;
+  color: #26384c;
+}
+
+.home-task-status {
+  color: #16834e;
+  font-weight: 600;
+}
+
+.home-pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-pending-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  font-size: 13px;
+}
+
+.home-pending-item span {
+  color: #16834e;
+  font-weight: 600;
+}
+
+@media (max-width: 650px) {
+  .task-modal-overlay {
+    padding: 8px;
+  }
+
+  .task-modal {
+    max-width: 100%;
+    max-height: 94vh;
+  }
+
+  .task-form-grid {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+}
+
 /* SATYA SCHOOL SIDEBAR DESIGN */
 
 .sidebar {

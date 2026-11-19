@@ -1,60 +1,207 @@
+
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import DataTable from '../components/common/DataTable.jsx'
 import { TABLES } from '../utils/tableConfig.js'
+import '../styles/block-modal.css'
 
-// One generic page that renders any table screen using utils/tableConfig.js
 export default function TablePage({ configKey }) {
   const { pathname } = useLocation()
   const key = configKey || pathname.replace(/^\//, '')
   const cfg = TABLES[key]
-  const [msg, setMsg] = useState('')
-  if (!cfg) return <div className="card"><div className="placeholder">Page not found</div></div>
+  const isBlockMaster = key === 'master/block'
 
-  const todo = (what) => setMsg(`${what}: backend API for this screen is not connected yet.`)
+  const [msg, setMsg] = useState('')
+  const [rows, setRows] = useState(() =>
+    cfg ? cfg.rows.map(row => [...row]) : []
+  )
+  const [modal, setModal] = useState('')
+  const [selected, setSelected] = useState(null)
+  const [blockName, setBlockName] = useState('')
+
+  if (!cfg) {
+    return <div className="card"><div className="placeholder">Page not found</div></div>
+  }
+
+  const now = () => new Date().toLocaleString('en-IN')
+
+  const openAdd = () => {
+    setBlockName('')
+    setSelected(null)
+    setMsg('')
+    setModal('add')
+  }
+
+  const openView = (row) => {
+    setSelected(row)
+    setBlockName(row[1])
+    setMsg('')
+    setModal('view')
+  }
+
+  const openEdit = () => {
+    setBlockName(selected[1])
+    setModal('edit')
+  }
+
+  const closeModal = () => {
+    setModal('')
+    setSelected(null)
+    setMsg('')
+  }
+
+  const saveBlock = () => {
+    const name = blockName.trim()
+
+    if (!name) {
+      setMsg('Please enter block name.')
+      return
+    }
+
+    if (modal === 'add') {
+      const nextId = Math.max(
+        0,
+        ...rows.map(row => Number(row[0].replace('BL', '')) || 0)
+      ) + 1
+
+      const newRow = [
+        `BL${nextId}`,
+        name,
+        'Admin User',
+        now(),
+        '',
+        ''
+      ]
+
+      setRows(prev => [...prev, newRow])
+      closeModal()
+      return
+    }
+
+    if (modal === 'edit' && selected) {
+      const updated = [...selected]
+      updated[1] = name
+      updated[4] = 'Admin User'
+      updated[5] = now()
+
+      setRows(prev =>
+        prev.map(row => row[0] === updated[0] ? updated : row)
+      )
+
+      setSelected(updated)
+      setModal('view')
+      setMsg('')
+    }
+  }
+
+  const todo = (what) =>
+    setMsg(`${what}: backend API for this screen is not connected yet.`)
 
   return (
-    <div className="card">
-      <div className="card-head">
-        <span>{cfg.title}</span>
-        <div className="acts">
-          {cfg.buttons?.map((b) => <button key={b} className="btn" style={{ background: '#1f6fb5' }} onClick={() => todo(b)}>{b}</button>)}
-          {!cfg.buttons && !cfg.filters && <button className="sq-btn" title="Add" onClick={() => todo('Add')}>+</button>}
-          <button className="sq-btn" title="Refresh" onClick={() => setMsg('')}>⟳</button>
+    <>
+      <div className="card">
+        <div className="card-head">
+          <span>{cfg.title}</span>
+
+          <div className="acts">
+            {isBlockMaster ? (
+              <button className="sq-btn" title="Add" onClick={openAdd}>+</button>
+            ) : (
+              cfg.buttons?.map(b => (
+                <button key={b} className="btn"
+                  style={{ background: '#1f6fb5' }}
+                  onClick={() => todo(b)}>{b}</button>
+              ))
+            )}
+
+            <button className="sq-btn" title="Refresh"
+              onClick={() => {
+                setMsg('')
+                if (isBlockMaster) {
+                  setRows(cfg.rows.map(row => [...row]))
+                }
+              }}>⟳</button>
+          </div>
+        </div>
+
+        <div className="card-body">
+          {msg && !modal && <div className="auth-notice info">{msg}</div>}
+
+          <DataTable
+            columns={cfg.columns}
+            rows={isBlockMaster ? rows : cfg.rows}
+            onIdClick={isBlockMaster ? openView : undefined}
+          />
         </div>
       </div>
-      <div className="card-body">
-        {(cfg.filters === 'block' || cfg.filters === 'fetch') && (
-          <div className="filters">
-            <div className="f"><label>BLOCK</label><input className="input" placeholder="Search..." /></div>
-            {cfg.filters === 'block' && <div className="f"><label>CLASSIFICATION</label><select className="input"><option>Choose your option</option></select></div>}
-            <button className="btn" onClick={() => todo('Fetch')}>Fetch</button>
-            {cfg.filters === 'block' && <button className="btn" onClick={() => todo('Select All')}>Select All</button>}
-          </div>
-        )}
-        {cfg.filters === 'atp' && (
-          <div className="filters">
-            <span className="btn btn-outline">Max Records is 200</span><span className="btn btn-outline">Month is current</span>
-            <button className="btn" onClick={() => todo('Fetch')}>Fetch</button>
-          </div>
-        )}
-        {cfg.filters === 'feedback' && (
-          <>
-            <div className="filters">
-              <div className="f"><label>TYPE</label><select className="input"><option>Choose your option</option></select></div>
-              <div className="f"><label>BLOCKS</label><input className="input" placeholder="Search..." /></div>
+
+      {isBlockMaster && modal && (
+        <div className="block-modal-overlay" onMouseDown={e => {
+          if (e.target === e.currentTarget) closeModal()
+        }}>
+          <div className="block-modal">
+
+            <div className="block-modal-header">
+              <strong>Block Master</strong>
+              <button className="block-modal-x" onClick={closeModal}>×</button>
             </div>
-            <div className="filters">
-              <div className="f"><label>START DATE</label><input type="date" className="input" /></div>
-              <div className="f"><label>END DATE</label><input type="date" className="input" /></div>
-              <div className="f"><label>ASSIGN TO</label><input className="input" /></div>
+
+            <div className="block-modal-body">
+              <div className="block-field">
+                <label>BLOCK</label>
+                <input
+                  value={blockName}
+                  onChange={e => setBlockName(e.target.value)}
+                  readOnly={modal === 'view'}
+                  autoFocus={modal !== 'view'}
+                />
+              </div>
+
+              {modal !== 'add' && (
+                <>
+                  <div className="block-system-info">
+                    <span className="block-info-icon">▪</span>
+                    System Information
+                  </div>
+
+                  <div className="block-info-grid">
+                    <div className="block-field">
+                      <label>CREATED BY</label>
+                      <input value={`${selected?.[2] || ''}  ${selected?.[3] || ''}`} readOnly />
+                    </div>
+
+                    <div className="block-field">
+                      <label>MODIFIED BY</label>
+                      <input
+                        value={selected?.[4]
+                          ? `${selected[4]}  ${selected[5]}`
+                          : ''}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {msg && <div className="block-validation">{msg}</div>}
             </div>
-            <button className="btn btn-success" style={{ marginBottom: 16 }} onClick={() => todo('Create Feedback And Assign ATP')}>Create Feedback And Assign ATP</button>
-          </>
-        )}
-        {msg && <div className="auth-notice info">{msg}</div>}
-        <DataTable columns={cfg.columns} rows={cfg.rows} />
-      </div>
-    </div>
+
+            <div className="block-modal-footer">
+              <button className="block-btn block-btn-close"
+                onClick={closeModal}>Close</button>
+
+              {modal === 'view' ? (
+                <button className="block-btn block-btn-edit"
+                  onClick={openEdit}>Edit</button>
+              ) : (
+                <button className="block-btn block-btn-save"
+                  onClick={saveBlock}>Save</button>
+              )}
+            </div>
+
+          </div>
+        </div>
+      )}
+    </>
   )
 }
